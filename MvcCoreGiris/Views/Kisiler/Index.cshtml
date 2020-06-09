@@ -1,0 +1,52 @@
+﻿@model List<Kisi>
+@{ ViewBag.Title = "Kişiler"; }
+
+<h1>@ViewBag.Title</h1>
+
+@if (TempData["mesaj"] != null)
+{
+<mesaj kapat-goster="true">
+    @TempData["mesaj"]
+</mesaj>}
+
+<a asp-action="Yeni" class="btn btn-primary btn-block mb-2"><i class="fas fa-plus mr-1"></i>Yeni Kişi</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Kişi Adı</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>@item.Id</td>
+    <td>@item.KisiAd</td>
+    <td>
+        <a asp-action="Duzenle" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Düzenle</a>
+        <a href="#" class="btn btn-sm btn-danger" onclick="sil(@item.Id, '@item.KisiAd')">Sil</a>
+    </td>
+</tr>
+}
+    </tbody>
+</table>
+
+<form asp-action="Sil" name="silForm">
+    <input type="hidden" name="id" />
+</form>
+
+@section scripts {
+    <script>
+        function sil(id, kisiAd) {
+            event.preventDefault();
+
+            if (confirm('"' + kisiAd + '" adlı kişiyi silmek istediğinize emin misiniz?')) {
+                document.silForm.elements.id.value = id;
+                document.silForm.submit();
+            }
+        }
+    </script>
+}
